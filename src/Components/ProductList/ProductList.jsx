@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import "./ProductList.css";
 import DataTable from "react-data-table-component";
 import option_icon from "../../Assets/option.png";
@@ -22,7 +22,7 @@ const ProductList = () => {
     return data.map((item, index) => ({ ...item, _uniqueId: index }));
   });
   const [filteredData, setFilteredData] = useState(allData);
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowIds, setSelectedRowIds] = useState(new Set());
   const [openDropdown, setOpenDropdown] = useState(null);
   const [selectedStatuses, setSelectedStatuses] = useState(["Đang soạn thảo"]);
   const [searchText, setSearchText] = useState("");
@@ -31,6 +31,7 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25); 
   const [isActionPopupOpen, setIsActionPopupOpen] = useState(false);
+  const toolbarRef = useRef(null);
 
   const actionMessages = {
     send: "Gửi duyệt thành công",
@@ -55,22 +56,21 @@ const ProductList = () => {
   }, [filteredData, currentPage, rowsPerPage]);
 
   const handleDeleteConfirm = () => {
-    const selectedIds = selectedRows.map((row) => row._uniqueId);
     setAllData((prevData) =>
-      prevData.filter((item) => !selectedIds.includes(item._uniqueId))
+      prevData.filter((item) => !selectedRowIds.has(item._uniqueId))
     );
     showNotification(actionMessages.delete, "success");
-    setSelectedRows([]);
+    setSelectedRowIds(new Set());
     setShowDeleteConfirm(false);
   };
 
   const handleDeleteCancel = () => {
     setShowDeleteConfirm(false);
-    setSelectedRows([]);
+    setSelectedRowIds(new Set());
   };
 
   const handleDelete = () => {
-    if (selectedRows.length > 1) {
+    if (selectedRowIds.size > 1) {
       setShowDeleteConfirm(true);
     } else {
       handleDeleteConfirm();
@@ -78,12 +78,8 @@ const ProductList = () => {
   };
 
   const handleDropdownAction = (action, itemUniqueId) => {
-    const itemIndex = allData.findIndex(
-      (item) => item._uniqueId === itemUniqueId
-    );
-    if (itemIndex === -1) return;
-
-    const item = allData[itemIndex];
+    const item = allData.find((item) => item._uniqueId === itemUniqueId);
+    if (!item) return;
 
     if (
       (action === "send" || action === "approve") &&
@@ -107,7 +103,10 @@ const ProductList = () => {
       const updatedItem = { ...item, status: newStatus };
       setAllData((prevData) => {
         const newData = [...prevData];
-        newData[itemIndex] = updatedItem;
+        const index = newData.findIndex((i) => i._uniqueId === itemUniqueId);
+        if (index !== -1) {
+          newData[index] = updatedItem;
+        }
         return newData;
       });
       showNotification(
@@ -119,17 +118,20 @@ const ProductList = () => {
   };
 
   const handleAction = (action) => {
+    const selectedItems = allData.filter((item) => selectedRowIds.has(item._uniqueId));
+
     const statusMap = {
       send: ["Đang soạn thảo", "Trả về"],
       approve: ["Gửi duyệt", "Ngừng áp dụng"],
       hide: ["Duyệt áp dụng"],
       return: ["Gửi duyệt", "Ngừng áp dụng"],
     };
-    const invalidItems = selectedRows.filter(
+    
+    const invalidItems = selectedItems.filter(
       (item) => !statusMap[action].includes(item.status)
     );
 
-    const incompleteItems = selectedRows.filter(
+    const incompleteItems = selectedItems.filter(
       (item) =>
         (!item.type || item.type.trim() === "") &&
         (action === "send" || action === "approve")
@@ -143,21 +145,22 @@ const ProductList = () => {
       return;
     }
 
-    const selectedIds = selectedRows.map((row) => row._uniqueId);
     const newStatus = getNewStatus(action);
 
     setAllData((prevData) =>
       prevData.map((item) =>
-        selectedIds.includes(item._uniqueId)
+        selectedRowIds.has(item._uniqueId)
           ? { ...item, status: newStatus }
           : item
       )
     );
+
     showNotification(
       actionMessages[action] || "Thao tác thành công",
       "success"
     );
-    setSelectedRows([]);
+
+    setSelectedRowIds(new Set());
   };
 
   const getNewStatus = (action) => {
@@ -186,6 +189,9 @@ const ProductList = () => {
   const handleResetFilters = () => {
     setSelectedStatuses(["Đang soạn thảo"]);
     setSearchText("");
+    if (toolbarRef.current) {
+      toolbarRef.current.resetFilters();
+    }
   };
 
   useEffect(() => {
@@ -202,44 +208,36 @@ const ProductList = () => {
     );
     setFilteredData(filtered);
     setCurrentPage(1); 
-    setSelectedRows([]); 
+    setSelectedRowIds(new Set()); 
   }, [allData, selectedStatuses, searchText]);
 
   const handleSelectAll = (event) => {
+    const newSelectedRowIds = new Set(selectedRowIds);
     if (event.target.checked) {
-      const newSelected = paginatedData.filter(
-        (row) => !selectedRows.some((r) => r._uniqueId === row._uniqueId)
-      );
-      setSelectedRows([...selectedRows, ...newSelected]);
+      paginatedData.forEach((row) => newSelectedRowIds.add(row._uniqueId));
     } else {
-      const newSelected = selectedRows.filter(
-        (row) => !paginatedData.some((r) => r._uniqueId === row._uniqueId)
-      );
-      setSelectedRows(newSelected);
+      paginatedData.forEach((row) => newSelectedRowIds.delete(row._uniqueId));
     }
+    setSelectedRowIds(newSelectedRowIds);
   };
 
   const handleRowSelect = (event, row) => {
+    const newSelectedRowIds = new Set(selectedRowIds);
     if (event.target.checked) {
-      setSelectedRows([...selectedRows, row]);
+      newSelectedRowIds.add(row._uniqueId);
     } else {
-      setSelectedRows(
-        selectedRows.filter((r) => r._uniqueId !== row._uniqueId)
-      );
+      newSelectedRowIds.delete(row._uniqueId);
     }
+    setSelectedRowIds(newSelectedRowIds);
   };
 
-  const isRowSelected = (row) => {
-    return selectedRows.some((r) => r._uniqueId === row._uniqueId);
-  };
+  const isRowSelected = (row) => selectedRowIds.has(row._uniqueId);
 
   const areAllRowsSelected = useMemo(
     () =>
       paginatedData.length > 0 &&
-      paginatedData.every((row) =>
-        selectedRows.some((r) => r._uniqueId === row._uniqueId)
-      ),
-    [paginatedData, selectedRows]
+      paginatedData.every((row) => selectedRowIds.has(row._uniqueId)),
+    [paginatedData, selectedRowIds]
   );
 
   const statusButtonsMap = {
@@ -271,9 +269,11 @@ const ProductList = () => {
               checked={areAllRowsSelected}
               ref={(input) => {
                 if (input) {
+                  const someSelected = paginatedData.some((row) =>
+                    selectedRowIds.has(row._uniqueId)
+                  );
                   input.indeterminate =
-                    selectedRows.length > 0 &&
-                    selectedRows.length < paginatedData.length;
+                    someSelected && !areAllRowsSelected;
                 }
               }}
             />
@@ -292,7 +292,7 @@ const ProductList = () => {
             />
             <div
               style={{ marginLeft: "5px" }}
-              title={row.question} 
+              title={row.question}
             >
               <div style={{ fontWeight: "bold", marginBottom: "5px" }}>
                 {row.question}
@@ -396,29 +396,20 @@ const ProductList = () => {
         width: "auto",
       },
     ],
-    [
-      openDropdown,
-      selectedRows,
-      areAllRowsSelected,
-      paginatedData.length,
-      selectedRows.length,
-    ]
+    [openDropdown, selectedRowIds, areAllRowsSelected, paginatedData]
   );
 
   const conditionalRowStyles = useMemo(
     () => [
       {
-        when: (row) =>
-          selectedRows.some(
-            (selectedRow) => selectedRow._uniqueId === row._uniqueId
-          ),
+        when: (row) => selectedRowIds.has(row._uniqueId),
         style: {
           backgroundColor: "#1A6634",
           color: "#fff",
         },
       },
     ],
-    [selectedRows]
+    [selectedRowIds]
   );
 
   useEffect(() => {
@@ -444,9 +435,12 @@ const ProductList = () => {
   };
 
   useEffect(() => {
-  }, [selectedRows, showDeleteConfirm]);
-
-  const isDisabled = selectedRows.length > 0 || showDeleteConfirm;
+    if (selectedRowIds.size > 0) {
+      setIsActionPopupOpen(true);
+    } else {
+      setIsActionPopupOpen(false);
+    }
+  }, [selectedRowIds]);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);
@@ -455,17 +449,17 @@ const ProductList = () => {
   const handleChangeRowsPerPage = (newPerPage) => {
     setRowsPerPage(newPerPage);
     setCurrentPage(1); 
-    setSelectedRows([]); 
+    setSelectedRowIds(new Set()); 
   };
 
   return (
     <div className="product-list">
-      <Toolbar onFilterChange={handleFilterChange} isDisabled={isDisabled} onReset={handleResetFilters} />
-      <FilterHeader onSearch={handleSearch} isDisabled={isDisabled} onReset={handleResetFilters} />
+      <Toolbar ref={toolbarRef} onFilterChange={handleFilterChange} isDisabled={selectedRowIds.size > 0 || showDeleteConfirm} />
+      <FilterHeader onSearch={handleSearch} isDisabled={selectedRowIds.size > 0 || showDeleteConfirm} onReset={handleResetFilters} />
 
       <div className="table-container">
         <DataTable
-        style={{borderBottom:"1px solid black"}}
+          style={{borderBottom:"1px solid black"}}
           className="data-table"
           columns={columns}
           data={paginatedData} 
@@ -484,17 +478,19 @@ const ProductList = () => {
         />
       </div>
 
-      {selectedRows.length > 0 && (
+      {isActionPopupOpen && (
         <ActionPopup
-          selectedCount={selectedRows.length}
-          statuses={selectedRows.map((row) => row.status)}
+          selectedCount={selectedRowIds.size}
+          statuses={allData
+            .filter((item) => selectedRowIds.has(item._uniqueId))
+            .map((item) => item.status)}
           onSend={() => handleAction("send")}
           onApprove={() => handleAction("approve")}
           onHide={() => handleAction("hide")}
           onReturn={() => handleAction("return")}
           onDelete={handleDelete}
           onClose={() => {
-            setSelectedRows([]);
+            setSelectedRowIds(new Set());
             setIsActionPopupOpen(false);
           }}
         />

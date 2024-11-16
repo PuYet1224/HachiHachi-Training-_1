@@ -1,17 +1,15 @@
-/* CustomPagination.css */
-
 .custom-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px; /* Điều chỉnh padding phù hợp */
+  padding: 10px 20px; 
   font-family: Mulish, Arial, sans-serif;
   font-size: 13px;
   position: fixed;
   bottom: 0;
   background: #f5f5f6;
   z-index: 999;
-  width: calc(100vw - 245px); /* Điều chỉnh theo layout của bạn */
+  width: calc(100vw - 245px); 
 }
 
 .custom-pagination .left-c {
@@ -42,7 +40,7 @@
 }
 
 .right-c button {
-  width: 40px; /* Điều chỉnh kích thước nút */
+  width: 40px;
   height: 32px;
   padding: 0;
   border: none;
@@ -50,10 +48,11 @@
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
-  color: #959DB3;
+  color: #959DB3; /* Đặt màu chữ mặc định là #959DB3 */
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s, color 0.3s; /* Thêm hiệu ứng chuyển đổi mượt mà */
 }
 
 .right-c button img {
@@ -62,12 +61,12 @@
 }
 
 .right-c .first-last-button {
-  width: 60px; /* Điều chỉnh kích thước nút Đầu và Cuối */
+  width: 60px; 
 }
 
 .right-c button.active {
-  background-color: #1A6634;
-  color: white;
+  background-color: #959DB3; /* Đặt màu nền của nút active thành #959DB3 */
+  color: white; /* Đổi màu chữ thành trắng khi active */
 }
 
 .right-c button:not(.active):hover {
@@ -83,4 +82,18 @@
 
 .right-c button.active img {
   filter: invert(1);
+}
+
+.right-c .ellipsis-button {
+  color: #959DB3;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0 10px;
+  border-radius: 5px;
+}
+
+.right-c .ellipsis-button:hover {
+  background-color: #e0e0e0;
 }
