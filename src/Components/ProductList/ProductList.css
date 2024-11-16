@@ -1,0 +1,245 @@
+.product-list {
+  width: calc(100vw - 245px);
+  overflow-x: auto;
+  margin: 191px 5px 0 5px;
+}
+
+.rdt_Table {
+  border-collapse: separate;
+}
+
+.rdt_TableRow {
+  height: 62px;
+  line-height: normal;
+}
+
+.rdt_TableCell {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.question-cell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rdt_TableRow:hover {
+  background-color: rgba(26, 102, 52, 0.7) !important;
+}
+.caNzNe {
+  margin-bottom: 55px !important;
+}
+.hudJpJ {
+  background-color: #f5f5f6 !important;
+  min-height: 10px !important;
+  padding-bottom: 5px;
+  padding-top: 30px;
+  position: fixed;
+  z-index: 999;
+  width: calc(100vw - 245px) !important;
+  justify-content: flex-start;
+}
+.kQSTYI {
+  border-top: 0px;
+  border-bottom: 0px !important;
+  margin-bottom: 10px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  justify-content: flex-start;
+  width: 100%;
+}
+.kQSTYI:last-of-type {
+  margin-bottom: 80px !important;
+}
+.product-list .rdt_Table input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #959db3;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  margin: 0; 
+  padding: 0; 
+}
+
+.product-list .rdt_Table input[type="checkbox"]:checked {
+  background-color: #1a6634;
+  border-color: #1a6634;
+  color: #fff;
+}
+
+.product-list .rdt_Table input[type="checkbox"]:checked::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 3px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.product-list .rdt_TableHeader input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #959db3;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-list .rdt_TableHeader input[type="checkbox"]:checked {
+  background-color: #1a6634;
+  border-color: #1a6634;
+}
+
+.product-list .rdt_TableHeader input[type="checkbox"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.option-button-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-left: 2px solid #f5f5f6;
+  padding: 0 8px;
+  cursor: pointer;
+  position: relative;
+}
+.option-button-container .option-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+}
+.option-button-container .option-container:hover {
+  background: #bdc2d2;
+}
+.option-button-container:hover .option-button {
+  filter: brightness(0) invert(1);
+}
+
+.option-button {
+  width: 16px;
+  height: 16px;
+  filter: grayscale(100%) brightness(70%) contrast(100%) sepia(20%)
+    hue-rotate(180deg) saturate(100%);
+}
+
+.bJrvXE {
+  justify-content: flex-end !important;
+}
+.product-list .rdt_TableHeadRow div:nth-child(5) {
+  justify-content: end;
+}
+.dropdown-menu {
+  z-index: 10;
+  position: absolute;
+  background: #bdc2d2;
+  right: 35px;
+  top: 16px;
+  gap: 14px;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+.dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dropdown-menu img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+.dropdown-item a {
+  color: #fff;
+}
+
+
+.delete-confirm-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  height: 243px;
+  width: 316px;
+  z-index: 3000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+.delete-confirm-modal .delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.delete-confirm-modal .delete img {
+  width: 20px;
+  height: 22px;
+}
+
+.delete-confirm-modal .delete p {
+  color: #FD7676;
+}
+
+.confirm-delete {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  font-size: 13px;
+  text-align: center;
+  padding: 5px 5px;
+}
+
+.confirm-delete p:nth-of-type(2) {
+  color: #36C8CF;
+}
+
+.delete-button{
+  display: flex;
+  flex-grow: 1;
+}
+
+.delete-button button {
+  flex: 1;
+  flex-grow: 1;
+  border-radius: 0;
+  border: none;
+}
+.delete-button button:nth-of-type(1){
+  background: #fff;
+}
+.delete-button button:nth-of-type(2){
+  background: #FD7676;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delete-button button:nth-of-type(2) img{
+  margin-right: 10px;
+  filter: invert(100%);
+}
+
+
