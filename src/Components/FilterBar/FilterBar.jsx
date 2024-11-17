@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./FilterHeader.css";
+import "./FilterBar.css";
 import filter_icon from "../../Assets/funnel.png";
 import search_icon from "../../Assets/glass.png";
 import debounce from "lodash.debounce"; 
 
-const FilterHeader = ({ onSearch, isDisabled, onReset }) => {
+const FilterBar = ({ onSearch, isDisabled, onReset }) => {
   const [searchText, setSearchText] = useState("");
   const debouncedSearch = useRef(
     debounce((query) => {
       onSearch(query.trim());
-    }, 500) // 500ms debounce delay
+    }, 500) 
   ).current;
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const FilterHeader = ({ onSearch, isDisabled, onReset }) => {
   };
 
   return (
-    <div id="FilterHeader" className={isDisabled ? "disabled" : ""}>
+    <div id="FilterBar" className={isDisabled ? "disabled" : ""}>
       <div className="above-filter">
         <div className="filter-title">
           <img src={filter_icon} alt="Filter Icon" className="filter-icon" />
@@ -60,7 +60,6 @@ const FilterHeader = ({ onSearch, isDisabled, onReset }) => {
                 placeholder="Tìm theo mã và câu hỏi"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                // Removed onKeyPress handler
                 disabled={isDisabled}
                 aria-label="Search Input"
               />
@@ -82,4 +81,4 @@ const FilterHeader = ({ onSearch, isDisabled, onReset }) => {
   );
 };
 
-export default FilterHeader;
+export default FilterBar;

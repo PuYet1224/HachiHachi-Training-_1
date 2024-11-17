@@ -12,9 +12,9 @@ import delete_icon from "../../Assets/delete.png";
 import danger_icon from "../../Assets/triangle-exclamation-solid.svg";
 import data from "../../Assets/data";
 import CustomPagination from "../CustomPagination/CustomPagination";
-import Toolbar from "../Toolbar/Toolbar";
-import FilterHeader from "../FilterHeader/FilterHeader";
-import ActionPopup from "../ActionPopup/ActionPopUp";
+import Header2 from "../Header2/Header2";
+import FilterBar from "../FilterBar/FilterBar";
+import ActionPopup from "../ActionPopup/ActionPopup";
 import Notification from "../Notification/Notification";
 
 const ProductList = () => {
@@ -31,7 +31,7 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25); 
   const [isActionPopupOpen, setIsActionPopupOpen] = useState(false);
-  const toolbarRef = useRef(null);
+  const header2Ref = useRef(null);
 
   const actionMessages = {
     send: "Gửi duyệt thành công",
@@ -189,8 +189,8 @@ const ProductList = () => {
   const handleResetFilters = () => {
     setSelectedStatuses(["Đang soạn thảo"]);
     setSearchText("");
-    if (toolbarRef.current) {
-      toolbarRef.current.resetFilters();
+    if (header2Ref.current) {
+      header2Ref.current.resetFilters();
     }
   };
 
@@ -454,8 +454,8 @@ const ProductList = () => {
 
   return (
     <div className="product-list">
-      <Toolbar ref={toolbarRef} onFilterChange={handleFilterChange} isDisabled={selectedRowIds.size > 0 || showDeleteConfirm} />
-      <FilterHeader onSearch={handleSearch} isDisabled={selectedRowIds.size > 0 || showDeleteConfirm} onReset={handleResetFilters} />
+      <Header2 ref={header2Ref} onFilterChange={handleFilterChange} isDisabled={selectedRowIds.size > 0 || showDeleteConfirm} />
+      <FilterBar onSearch={handleSearch} isDisabled={selectedRowIds.size > 0 || showDeleteConfirm} onReset={handleResetFilters} />
 
       <div className="table-container">
         <DataTable

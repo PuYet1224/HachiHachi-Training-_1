@@ -1,4 +1,4 @@
-#Toolbar {
+#Header2 {
   display: flex;
   align-items: center;
   height: 34px;
@@ -17,7 +17,7 @@
   background: #f5f5f6;
 }
 
-#Toolbar.disabled {
+#Header2.disabled {
   pointer-events: none;
   cursor: not-allowed; 
 }

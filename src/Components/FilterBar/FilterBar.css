@@ -1,4 +1,4 @@
-#FilterHeader {
+#FilterBar {
   display: flex;
   height: 53px;
   width: calc(100vw - 265px);
@@ -11,7 +11,7 @@
   transition: opacity 0.3s ease, cursor 0.3s ease;
 }
 
-#FilterHeader.disabled {
+#FilterBar.disabled {
   pointer-events: none;
   cursor: not-allowed; 
 }

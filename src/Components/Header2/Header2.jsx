@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import "./Toolbar.css";
+import "./Header2.css";
 import upload_icon from "../../Assets/upload (1).png";
 import download_icon from "../../Assets/download.png";
 import plus_icon from "../../Assets/plus.png";
 
-// Sử dụng forwardRef để truyền ref từ component cha
-const Toolbar = forwardRef(({ onFilterChange, isDisabled }, ref) => {
+  const Header2 = forwardRef(({ onFilterChange, isDisabled }, ref) => {
   const items = ["Đang soạn thảo", "Gửi duyệt", "Đã duyệt", "Ngừng áp dụng"];
   const [checkedStates, setCheckedStates] = useState([true, false, false, false]);
   const [isOverflowing, setIsOverflowing] = useState(false);
-  const toolbarRef = useRef(null);
+  const header2Ref = useRef(null);
 
   const handleCheckboxChange = (index) => {
     if (isDisabled) return;
@@ -33,8 +32,8 @@ const Toolbar = forwardRef(({ onFilterChange, isDisabled }, ref) => {
   }));
 
   const checkOverflow = () => {
-    if (toolbarRef.current) {
-      const { scrollWidth, clientWidth } = toolbarRef.current;
+    if (header2Ref.current) {
+      const { scrollWidth, clientWidth } = header2Ref.current;
       setIsOverflowing(scrollWidth > clientWidth);
     }
   };
@@ -49,8 +48,8 @@ const Toolbar = forwardRef(({ onFilterChange, isDisabled }, ref) => {
 
   return (
     <div
-      id="Toolbar"
-      ref={toolbarRef}
+      id="Header2"
+      ref={header2Ref}
       className={`${isOverflowing ? "overflowing" : ""} ${isDisabled ? "disabled" : ""}`.trim()}
     >
       <div className="left-t">
@@ -88,4 +87,4 @@ const Toolbar = forwardRef(({ onFilterChange, isDisabled }, ref) => {
   );
 });
 
-export default Toolbar;
+export default Header2;

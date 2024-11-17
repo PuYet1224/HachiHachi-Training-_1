@@ -1,6 +1,5 @@
-// ActionPopUp.jsx
 import React from "react";
-import "./ActionPopUp.css";
+import "./ActionPopup.css";
 import send_icon from "../../Assets/share.png";
 import approve_icon from "../../Assets/check.png";
 import hide_icon from "../../Assets/traffic-signal.png";
@@ -8,7 +7,7 @@ import return_icon from "../../Assets/turn-back.png";
 import delete_icon from "../../Assets/delete.png";
 import close_icon from "../../Assets/close.png";
 
-const ActionPopUp = ({
+const ActionPopup = ({
   selectedCount,
   statuses,
   onSend,
@@ -70,4 +69,4 @@ const ActionPopUp = ({
   );
 };
 
-export default ActionPopUp;
+export default ActionPopup;

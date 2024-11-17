@@ -1,12 +1,12 @@
 import React from "react";
-import "./HeaderWide.css";
+import "./Header1.css";
 import glass_icon from "../../Assets/glass.png";
 import bell_icon from "../../Assets/bell.png";
 import avatar_icon from "../../Assets/avatar.png";
 
-const HeaderWide = () => {
+const Header1 = () => {
   return (
-    <div id="HeaderWide">
+    <div id="Header1">
       <div className="left-h">
         <div className="hyphen-line">------------</div>
         <span className="vertical-line">|</span>
@@ -39,4 +39,4 @@ const HeaderWide = () => {
   );
 };
 
-export default HeaderWide;
+export default Header1;
