@@ -1,4 +1,6 @@
+// Sidebar.jsx
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import "./Sidebar.css";
 import logo_hachi from "../../Assets/HachiLogo.svg";
 import menu_icon from "../../Assets/bars-solid.svg";
@@ -19,7 +21,9 @@ const Sidebar = () => {
     setHighlighted((prev) => !prev); 
   };
 
-  return (
+  const portalElement = document.getElementById('sidebar-portal') || document.body;
+
+  return ReactDOM.createPortal(
     <div id="sidebar-container">
       <div className="icon-container">
         <img src={logo_hachi} alt="Logo Hachi" />
@@ -69,7 +73,8 @@ const Sidebar = () => {
           </ul>
         )}
       </div>
-    </div>
+    </div>,
+    portalElement 
   );
 };
 

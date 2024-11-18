@@ -4,6 +4,7 @@ html, body {
 }
 
 #sidebar-container {
+  position: fixed;
   width: 220px;
   display: flex;
   flex-direction: column;
@@ -122,4 +123,8 @@ html, body {
 
 .icon {
   transition: filter 0.3s ease;
+}
+
+body {
+  font-family: 'Mulish', sans-serif;
 }
